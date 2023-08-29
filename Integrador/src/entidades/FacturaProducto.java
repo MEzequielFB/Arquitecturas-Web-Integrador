@@ -26,4 +26,10 @@ public class FacturaProducto {
 	public int getIdProducto() {
 		return idProducto;
 	}
+
+	@Override
+	public String toString() {
+		return "FacturaProducto [idFactura=" + idFactura + ", idProducto=" + idProducto + ", cantidad=" + cantidad
+				+ "]";
+	}
 }
