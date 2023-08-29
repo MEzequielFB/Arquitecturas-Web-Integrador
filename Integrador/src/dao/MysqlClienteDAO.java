@@ -50,11 +50,15 @@ public class MysqlClienteDAO implements EntityDAO {
 		CSVParser parser = CSVFormat.DEFAULT.withHeader().parse(
 				new FileReader("C:/eclipse-workspace/Clone 1/Arquitecturas-Web-Integrador/Integrador/clientes.csv"));
 		for (CSVRecord row : parser) {
-			System.out.println(row.get("idCliente"));
-			System.out.println(row.get("nombre"));
-			System.out.println(row.get("email"));
+			String sql = "INSERT INTO cliente (idCliente, nombre, email) VALUES (?, ?, ?)";
+			PreparedStatement statement = conn.prepareStatement(sql);
+			statement.setInt(1, Integer.valueOf(row.get("idCliente")));
+			statement.setString(2, row.get("nombre"));
+			statement.setString(3, row.get("email"));
+			statement.executeUpdate();
+			conn.commit();
+			statement.close();
 		}
-		conn.commit();
 		closeConnection(conn);
 	}
 
@@ -107,6 +111,7 @@ public class MysqlClienteDAO implements EntityDAO {
 		statement.close();
 		closeConnection(conn);
 	}
+	
 
 	public void update(Cliente cliente) throws SQLException {
 		Connection conn = createConnection();
@@ -149,7 +154,7 @@ public class MysqlClienteDAO implements EntityDAO {
 				+ "JOIN producto p "
 				+ "	ON fp.idProducto = p.idProducto "
 				+ "GROUP BY c.idCliente, c.nombre, c.email "
-				+ "ORDER BY facturacion DESC";
+				+ "ORDER BY facturacion DESC";
 		PreparedStatement statement = conn.prepareStatement(sql);
 		ResultSet resultSet = statement.executeQuery();
 		while (resultSet.next()) {
