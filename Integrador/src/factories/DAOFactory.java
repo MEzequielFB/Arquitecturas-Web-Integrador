@@ -1,12 +1,12 @@
-package db;
+package factories;
 
-import java.sql.SQLException;
+import dao.MysqlClienteDAO;
+import dao.MysqlFacturaDAO;
+import dao.MysqlFacturaProductoDAO;
+import dao.MysqlProductoDAO;
 
 public abstract class DAOFactory {
 	public static final int MYSQL_JDBC = 1;
-	
-	//Crea el esquema - PREGUNTAR SI ESTA BIEN PONERLO ACA
-	public abstract void createSchema() throws SQLException;
 	
 	//Obtiene las entidades para realizar consultas
 	public abstract MysqlClienteDAO getClienteDAO();
