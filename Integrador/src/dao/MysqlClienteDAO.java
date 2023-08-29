@@ -43,12 +43,12 @@ public class MysqlClienteDAO implements EntityDAO {
 		closeConnection(conn);
 	}
 
-	public void poblateTable() throws FileNotFoundException, IOException, SQLException {
+	public void poblateTable(String path) throws FileNotFoundException, IOException, SQLException {
 		Connection conn = createConnection();
 		conn.setAutoCommit(false);
 
 		CSVParser parser = CSVFormat.DEFAULT.withHeader().parse(
-				new FileReader("C:/eclipse-workspace/Clone 1/Arquitecturas-Web-Integrador/Integrador/clientes.csv"));
+				new FileReader(path));
 		for (CSVRecord row : parser) {
 			String sql = "INSERT INTO cliente (idCliente, nombre, email) VALUES (?, ?, ?)";
 			PreparedStatement statement = conn.prepareStatement(sql);

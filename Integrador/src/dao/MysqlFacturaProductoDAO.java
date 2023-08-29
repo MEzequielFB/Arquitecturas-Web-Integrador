@@ -1,11 +1,18 @@
 package dao;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 
 import entidades.FacturaProducto;
 import factories.MysqlDAOFactory;
@@ -40,6 +47,26 @@ public class MysqlFacturaProductoDAO implements EntityDAO {
     	conn.commit();
     	
     }
+    
+	public void poblateTable(String path) throws FileNotFoundException, IOException, SQLException {
+		Connection conn = createConnection();
+		conn.setAutoCommit(false);
+
+		CSVParser parser = CSVFormat.DEFAULT.withHeader().parse(
+				new FileReader(path));
+		for (CSVRecord row : parser) {
+			String sql = "INSERT INTO factura_producto (idFactura, idProducto, cantidad) VALUES (?, ?, ?)";
+			PreparedStatement statement = conn.prepareStatement(sql);
+			statement.setInt(1, Integer.valueOf(row.get("idFactura")));
+			statement.setInt(2, Integer.valueOf(row.get("idProducto")));
+			statement.setInt(3, Integer.valueOf(row.get("cantidad")));
+			statement.executeUpdate();
+			conn.commit();
+			statement.close();
+		}
+		closeConnection(conn);
+	}
+	
 	
 	public FacturaProducto /*List<FacturaProducto>*/ getBillById(int idFactura) throws SQLException {
 		Connection conn = createConnection();

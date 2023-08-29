@@ -1,11 +1,18 @@
 package dao;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 
 import entidades.Producto;
 import factories.MysqlDAOFactory;
@@ -38,6 +45,26 @@ public class MysqlProductoDAO implements EntityDAO {
     	conn.commit();
     	closeConnection(conn);
     }
+    
+	public void poblateTable(String path) throws FileNotFoundException, IOException, SQLException {
+		Connection conn = createConnection();
+		conn.setAutoCommit(false);
+
+		CSVParser parser = CSVFormat.DEFAULT.withHeader().parse(
+				new FileReader(path));
+		for (CSVRecord row : parser) {
+			String sql = "INSERT INTO producto (idProducto, nombre, valor) VALUES (?, ?, ?)";
+			PreparedStatement statement = conn.prepareStatement(sql);
+			statement.setInt(1, Integer.valueOf(row.get("idProducto")));
+			statement.setString(2, row.get("nombre"));
+			statement.setFloat(3, Float.valueOf(row.get("valor")));
+			statement.executeUpdate();
+			conn.commit();
+			statement.close();
+		}
+		closeConnection(conn);
+	}
+	
 	
 	public Producto getById(int idProducto) throws SQLException {
 		Connection conn = createConnection();
@@ -150,7 +177,7 @@ public class MysqlProductoDAO implements EntityDAO {
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
         	ResultSet resultSet = statement.executeQuery();
         	if (resultSet.next()) {
-        		producto = new Producto(resultSet.getInt("idProducto"),resultSet.getString("nombre"),resultSet.getDouble("valor"));
+        		producto = new Producto(resultSet.getInt("idProducto"),resultSet.getString("nombreProducto"),resultSet.getDouble("recaudacion"));
         	}
             conn.commit();
             statement.close();
