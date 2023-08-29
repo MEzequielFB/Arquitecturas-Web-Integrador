@@ -8,6 +8,8 @@ import dao.MysqlProductoDAO;
 public abstract class DAOFactory {
 	public static final int MYSQL_JDBC = 1;
 	
+	public static DAOFactory mysql;
+	
 	//Obtiene las entidades para realizar consultas
 	public abstract MysqlClienteDAO getClienteDAO();
 	public abstract MysqlProductoDAO getProductoDAO();
@@ -18,9 +20,19 @@ public abstract class DAOFactory {
 	public static DAOFactory getDAOFactory(int whichFactory) {
 		switch (whichFactory) {
 			case MYSQL_JDBC:
-				return new MysqlDAOFactory();
+				return instanciarMySqL();
 			default:
 				return null;
 		}
+	}
+	
+	//Garantiza SINGLETON
+
+	public static DAOFactory instanciarMySqL() {
+		if (mysql == null) {
+			mysql = new MysqlDAOFactory();
+			return mysql;
+		}
+		return mysql;
 	}
 }
