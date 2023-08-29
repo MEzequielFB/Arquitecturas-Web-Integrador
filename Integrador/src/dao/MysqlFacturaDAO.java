@@ -38,7 +38,7 @@ public class MysqlFacturaDAO implements EntityDAO {
     	conn.commit();
     }
 
-    public Factura obtenerPorId(int idFactura) throws SQLException {
+    public Factura getBillById(int idFactura) throws SQLException {
     	Connection conn = createConnection();
     	conn.setAutoCommit(false);
     	
@@ -55,7 +55,7 @@ public class MysqlFacturaDAO implements EntityDAO {
         return factura;
     }
 
-    public List<Factura> obtenerTodos() throws SQLException {
+    public List<Factura> getAll() throws SQLException {
     	Connection conn = createConnection();
     	conn.setAutoCommit(false);
     	
@@ -72,7 +72,7 @@ public class MysqlFacturaDAO implements EntityDAO {
         return facturas;
     }
 
-    public void insertar(Factura factura) throws SQLException {
+    public void insert(Factura factura) throws SQLException {
     	Connection conn = createConnection();
     	conn.setAutoCommit(false);
     	
@@ -93,7 +93,7 @@ public class MysqlFacturaDAO implements EntityDAO {
         closeConnection(conn);
     }
 
-    public void actualizar(Factura factura) throws SQLException {
+    public void update(Factura factura) throws SQLException {
     	Connection conn = createConnection();
     	conn.setAutoCommit(false);
     	
@@ -115,7 +115,7 @@ public class MysqlFacturaDAO implements EntityDAO {
         closeConnection(conn);
     }
 
-    public void eliminar(int idFactura) throws SQLException {
+    public void delete(int idFactura) throws SQLException {
     	Connection conn = createConnection();
     	conn.setAutoCommit(false);
     	

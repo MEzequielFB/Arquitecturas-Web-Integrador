@@ -39,7 +39,7 @@ public class MysqlProductoDAO implements EntityDAO {
     	closeConnection(conn);
     }
 	
-	public Producto obtenerPorId(int idProducto) throws SQLException {
+	public Producto getById(int idProducto) throws SQLException {
 		Connection conn = createConnection();
     	conn.setAutoCommit(false);
 		
@@ -57,7 +57,7 @@ public class MysqlProductoDAO implements EntityDAO {
     }
 
 
-    public List<Producto> obtenerTodos() throws SQLException {
+    public List<Producto> getAll() throws SQLException {
     	Connection conn = createConnection();
     	conn.setAutoCommit(false);
     	
@@ -74,7 +74,7 @@ public class MysqlProductoDAO implements EntityDAO {
         return productos;
     }
 
-    public void insertar(Producto producto) throws SQLException {
+    public void insert(Producto producto) throws SQLException {
     	Connection conn = createConnection();
     	conn.setAutoCommit(false);
     	
@@ -97,7 +97,7 @@ public class MysqlProductoDAO implements EntityDAO {
     }
 
 
-    public void actualizar(Producto producto) throws SQLException {
+    public void update(Producto producto) throws SQLException {
     	Connection conn = createConnection();
     	conn.setAutoCommit(false);
     	
@@ -121,7 +121,7 @@ public class MysqlProductoDAO implements EntityDAO {
     }
 
 
-    public void eliminar(int idProducto) throws SQLException {
+    public void delete(int idProducto) throws SQLException {
     	Connection conn = createConnection();
     	conn.setAutoCommit(false);
     	
@@ -141,4 +141,31 @@ public class MysqlProductoDAO implements EntityDAO {
         }
         closeConnection(conn);
     }
+    
+    public Producto moreRaisedProduct() throws SQLException{
+    	Connection conn = createConnection();
+    	conn.setAutoCommit(false);
+        String sql = "SELECT P.idProducto,P.nombre AS nombreProducto, SUM(FP.cantidad * PR.valor) AS recaudacion FROM Factura_Producto FP JOIN Producto PR ON FP.idProducto = PR.idProducto JOIN Producto P ON PR.idProducto = P.idProducto GROUP BY P.idProducto, P.nombre ORDER BY recaudacion DESC LIMIT 1";
+        Producto producto = null;
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
+        	ResultSet resultSet = statement.executeQuery();
+        	if (resultSet.next()) {
+        		producto = new Producto(resultSet.getInt("idProducto"),resultSet.getString("nombre"),resultSet.getDouble("valor"));
+        	}
+            conn.commit();
+            statement.close();
+            closeConnection(conn);
+            return producto;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            try {
+            	conn.rollback(); // En caso de error, realiza rollback para deshacer los cambios
+            } catch (SQLException rollbackException) {
+                rollbackException.printStackTrace();
+            }
+        }
+        return producto;
+    }
+    
+    
 }

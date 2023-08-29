@@ -135,5 +135,31 @@ public class MysqlClienteDAO implements EntityDAO {
 		statement.close();
 		closeConnection(conn);
 	}
+	
+	public List<Cliente> getClientsByBill() throws SQLException {
+		Connection conn = createConnection();
+		conn.setAutoCommit(false);
+		List<Cliente> clientes = new ArrayList<>();
+		String sql = "SELECT c.idCliente, c.nombre, c.email, SUM(fp.cantidad * p.valor) AS facturacion "
+				+ "FROM cliente c "
+				+ "LEFT JOIN factura f "
+				+ "	ON c.idCliente = f.idCliente "
+				+ "JOIN factura_producto fp "
+				+ "	ON f.idFactura = fp.idFactura "
+				+ "JOIN producto p "
+				+ "	ON fp.idProducto = p.idProducto "
+				+ "GROUP BY c.idCliente, c.nombre, c.email "
+				+ "ORDER BY facturacion DESC";
+		PreparedStatement statement = conn.prepareStatement(sql);
+		ResultSet resultSet = statement.executeQuery();
+		while (resultSet.next()) {
+			Cliente cliente = new Cliente(resultSet.getInt("idcliente"), resultSet.getString("nombre"),
+					resultSet.getString("email"));
+			clientes.add(cliente);
+		}
+		statement.close();
+		closeConnection(conn);
+		return clientes;
+	}
 
 }
