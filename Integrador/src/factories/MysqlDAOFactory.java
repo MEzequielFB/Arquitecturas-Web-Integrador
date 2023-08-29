@@ -61,4 +61,8 @@ public class MysqlDAOFactory extends DAOFactory {
 		
 		return null;
 	}
+	
+	public static void closeConnection(Connection conn) throws SQLException {
+		conn.close();
+	}
 }
