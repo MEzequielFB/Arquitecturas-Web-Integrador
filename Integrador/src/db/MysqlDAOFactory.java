@@ -91,7 +91,7 @@ public class MysqlDAOFactory extends DAOFactory {
 		}
 		
 		try {
-			return DriverManager.getConnection(DBURL, "root", "password");
+			return DriverManager.getConnection(DBURL, "root", "");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
