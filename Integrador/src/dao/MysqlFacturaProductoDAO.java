@@ -48,6 +48,7 @@ public class MysqlFacturaProductoDAO implements EntityDAO {
     	
     }
     
+    @Override
 	public void poblateTable(String path) throws FileNotFoundException, IOException, SQLException {
 		Connection conn = createConnection();
 		conn.setAutoCommit(false);
