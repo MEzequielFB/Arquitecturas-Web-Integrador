@@ -99,14 +99,14 @@ public class MysqlClienteDAO implements EntityDAO {
 		return clientes;
 	}
 
-	public void insert(Cliente cliente) throws SQLException {
+	public void insert(String nombre, String email) throws SQLException {
 		Connection conn = createConnection();
 		conn.setAutoCommit(false);
 
 		String sql = "INSERT INTO cliente (nombre, email) VALUES (?, ?)";
 		PreparedStatement statement = conn.prepareStatement(sql);
-		statement.setString(1, cliente.getNombre());
-		statement.setString(2, cliente.getEmail());
+		statement.setString(1, nombre);
+		statement.setString(2, email);
 		statement.executeUpdate();
 		conn.commit();
 		statement.close();
@@ -114,15 +114,15 @@ public class MysqlClienteDAO implements EntityDAO {
 	}
 	
 
-	public void update(Cliente cliente) throws SQLException {
+	public void update(int idCliente, String nombre, String email) throws SQLException {
 		Connection conn = createConnection();
 		conn.setAutoCommit(false);
 
 		String sql = "UPDATE cliente SET nombre = ?, email = ? WHERE idcliente = ?";
 		PreparedStatement statement = conn.prepareStatement(sql);
-		statement.setString(1, cliente.getNombre());
-		statement.setString(2, cliente.getEmail());
-		statement.setInt(3, cliente.getIdCliente());
+		statement.setString(1, nombre);
+		statement.setString(2, email);
+		statement.setInt(3, idCliente);
 		statement.executeUpdate();
 		conn.commit();
 		statement.close();

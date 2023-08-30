@@ -102,14 +102,14 @@ public class MysqlProductoDAO implements EntityDAO {
         return productos;
     }
 
-    public void insert(Producto producto) throws SQLException {
+    public void insert(String nombre, double valor) throws SQLException {
     	Connection conn = createConnection();
     	conn.setAutoCommit(false);
     	
         String sql = "INSERT INTO producto (nombre, valor) VALUES (?, ?)";
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
-            statement.setString(1, producto.getNombre());
-            statement.setDouble(2, producto.getValor());
+            statement.setString(1, nombre);
+            statement.setDouble(2, valor);
             statement.executeUpdate();
             conn.commit();
             statement.close();
@@ -125,15 +125,15 @@ public class MysqlProductoDAO implements EntityDAO {
     }
 
 
-    public void update(Producto producto) throws SQLException {
+    public void update(int idProducto, String nombre, double valor) throws SQLException {
     	Connection conn = createConnection();
     	conn.setAutoCommit(false);
     	
         String sql = "UPDATE producto SET nombre = ?, valor = ? WHERE idProducto = ?";
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
-            statement.setString(1, producto.getNombre());
-            statement.setDouble(2, producto.getValor());
-            statement.setInt(3, producto.getIdProducto());
+            statement.setString(1, nombre);
+            statement.setDouble(2, valor);
+            statement.setInt(3, idProducto);
             statement.executeUpdate();
             conn.commit();
             statement.close();
@@ -173,7 +173,13 @@ public class MysqlProductoDAO implements EntityDAO {
     public Producto moreRaisedProduct() throws SQLException{
     	Connection conn = createConnection();
     	conn.setAutoCommit(false);
-        String sql = "SELECT P.idProducto,P.nombre AS nombreProducto, SUM(FP.cantidad * PR.valor) AS recaudacion FROM Factura_Producto FP JOIN Producto PR ON FP.idProducto = PR.idProducto JOIN Producto P ON PR.idProducto = P.idProducto GROUP BY P.idProducto, P.nombre ORDER BY recaudacion DESC LIMIT 1";
+        String sql = "SELECT P.idProducto, P.nombre AS nombreProducto, P.valor, SUM(FP.cantidad * P.valor) AS recaudacion "
+        		+ "FROM factura_producto FP "
+    			+ "JOIN producto P"
+    			+ " ON FP.idProducto = P.idProducto "
+    			+ "GROUP BY P.idProducto, P.nombre, P.valor "
+    			+ "ORDER BY recaudacion DESC "
+    			+ "LIMIT 1";
         Producto producto = null;
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
         	ResultSet resultSet = statement.executeQuery();

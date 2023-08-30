@@ -98,13 +98,13 @@ public class MysqlFacturaDAO implements EntityDAO {
         return facturas;
     }
 
-    public void insert(Factura factura) throws SQLException {
+    public void insert(int idCliente) throws SQLException {
     	Connection conn = createConnection();
     	conn.setAutoCommit(false);
     	
         String sql = "INSERT INTO factura (idCliente) VALUES (?)";
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
-            statement.setInt(1, factura.getIdCliente());
+            statement.setInt(1, idCliente);
             statement.executeUpdate();
             conn.commit();
             statement.close();
@@ -119,14 +119,14 @@ public class MysqlFacturaDAO implements EntityDAO {
         closeConnection(conn);
     }
 
-    public void update(Factura factura) throws SQLException {
+    public void update(int idFactura, int idCliente) throws SQLException {
     	Connection conn = createConnection();
     	conn.setAutoCommit(false);
     	
         String sql = "UPDATE factura SET idCliente = ? WHERE idFactura = ?";
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
-            statement.setInt(1, factura.getIdCliente());
-            statement.setInt(2, factura.getIdFactura());
+            statement.setInt(1, idCliente);
+            statement.setInt(2, idFactura);
             statement.executeUpdate();
             conn.commit();
             statement.close();

@@ -69,11 +69,10 @@ public class MysqlFacturaProductoDAO implements EntityDAO {
 	}
 	
 	
-	public FacturaProducto /*List<FacturaProducto>*/ getBillById(int idFactura) throws SQLException {
+	public FacturaProducto getBillById(int idFactura) throws SQLException {
 		Connection conn = createConnection();
     	conn.setAutoCommit(false);
 		
-        //List<FacturaProducto> facturaProductos = new ArrayList<>();
         String sql = "SELECT idFactura, idProducto, cantidad FROM factura_producto WHERE idFactura = ?";
         PreparedStatement statement = conn.prepareStatement(sql);
         statement.setInt(1, idFactura);
@@ -81,9 +80,7 @@ public class MysqlFacturaProductoDAO implements EntityDAO {
         FacturaProducto facturaProducto = null;
         while (resultSet.next()) {
             facturaProducto = new FacturaProducto(resultSet.getInt("idFactura"),resultSet.getInt("idProducto"),resultSet.getInt("cantidad"));
-            //facturaProductos.add(facturaProducto);
         }
-        //return facturaProductos;
         statement.close();
         closeConnection(conn);
         return facturaProducto;
@@ -107,15 +104,15 @@ public class MysqlFacturaProductoDAO implements EntityDAO {
         return facturas_productos;
     }
 
-    public void insert(FacturaProducto facturaProducto) throws SQLException {
+    public void insert(int idFactura, int idProducto, int cantidad) throws SQLException {
     	Connection conn = createConnection();
     	conn.setAutoCommit(false);
     	
         String sql = "INSERT INTO factura_producto (idFactura, idProducto, cantidad) VALUES (?, ?, ?)";
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
-            statement.setInt(1, facturaProducto.getIdFactura());
-            statement.setInt(2, facturaProducto.getIdProducto());
-            statement.setInt(3, facturaProducto.getCantidad());
+            statement.setInt(1, idFactura);
+            statement.setInt(2, idProducto);
+            statement.setInt(3, cantidad);
             statement.executeUpdate();
             conn.commit();
             statement.close();
@@ -130,15 +127,15 @@ public class MysqlFacturaProductoDAO implements EntityDAO {
         closeConnection(conn);
     }
 
-    public void update(FacturaProducto facturaProducto) throws SQLException {
+    public void update(int idFactura, int idProducto, int cantidad) throws SQLException {
     	Connection conn = createConnection();
     	conn.setAutoCommit(false);
     	
         String sql = "UPDATE factura_producto SET cantidad = ? WHERE idFactura = ? AND idProducto = ?";
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
-            statement.setInt(1, facturaProducto.getCantidad());
-            statement.setInt(2, facturaProducto.getIdFactura());
-            statement.setInt(3, facturaProducto.getIdProducto());
+            statement.setInt(1, cantidad);
+            statement.setInt(2, idFactura);
+            statement.setInt(3, idProducto);
             statement.executeUpdate();
             conn.commit();
             statement.close();
