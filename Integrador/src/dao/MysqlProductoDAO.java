@@ -15,25 +15,16 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
 import entidades.Producto;
-import factories.MysqlDAOFactory;
+import helpers.ConexionHelper;
 
 // Consultas de productos
 public class MysqlProductoDAO implements EntityDAO {
 	
-	@Override
-	public Connection createConnection() throws SQLException {
-		return MysqlDAOFactory.createConnection();
-	}
 
-	@Override
-	public void closeConnection(Connection conn) throws SQLException {
-		conn.close();
-	}
-    
+  
     @Override
     public void createTable() throws SQLException {
-    	Connection conn = createConnection();
-    	conn.setAutoCommit(false);
+    	Connection conn = ConexionHelper.createConnection();
     	
     	String create_table = "CREATE TABLE IF NOT EXISTS producto(" +
 		"idProducto INT AUTO_INCREMENT," + // PK
@@ -43,13 +34,12 @@ public class MysqlProductoDAO implements EntityDAO {
     	
     	conn.prepareStatement(create_table).execute();
     	conn.commit();
-    	closeConnection(conn);
+    	ConexionHelper.closeConnection(conn);
     }
     
     @Override
 	public void poblateTable(String path) throws FileNotFoundException, IOException, SQLException {
-		Connection conn = createConnection();
-		conn.setAutoCommit(false);
+		Connection conn = ConexionHelper.createConnection();
 
 		CSVParser parser = CSVFormat.DEFAULT.withHeader().parse(
 				new FileReader(path));
@@ -63,13 +53,13 @@ public class MysqlProductoDAO implements EntityDAO {
 			conn.commit();
 			statement.close();
 		}
-		closeConnection(conn);
+		ConexionHelper.closeConnection(conn);
 	}
 	
 	
 	public Producto getById(int idProducto) throws SQLException {
-		Connection conn = createConnection();
-    	conn.setAutoCommit(false);
+		Connection conn = ConexionHelper.createConnection();
+    	
 		
         String sql = "SELECT idProducto, nombre, valor FROM producto WHERE idProducto = ?";
         PreparedStatement statement = conn.prepareStatement(sql);
@@ -80,13 +70,13 @@ public class MysqlProductoDAO implements EntityDAO {
             producto = new Producto(resultSet.getInt("idProducto"),resultSet.getString("nombre"),resultSet.getDouble("valor"));
         }
         statement.close();
-        closeConnection(conn);
+        ConexionHelper.closeConnection(conn);
         return producto;
     }
 
 
     public List<Producto> getAll() throws SQLException {
-    	Connection conn = createConnection();
+    	Connection conn = ConexionHelper.createConnection();
     	conn.setAutoCommit(false);
     	
         List<Producto> productos = new ArrayList<>();
@@ -98,12 +88,12 @@ public class MysqlProductoDAO implements EntityDAO {
             productos.add(producto);
         }
         statement.close();
-        closeConnection(conn);
+        ConexionHelper.closeConnection(conn);
         return productos;
     }
 
     public void insert(String nombre, double valor) throws SQLException {
-    	Connection conn = createConnection();
+    	Connection conn = ConexionHelper.createConnection();
     	conn.setAutoCommit(false);
     	
         String sql = "INSERT INTO producto (nombre, valor) VALUES (?, ?)";
@@ -121,57 +111,12 @@ public class MysqlProductoDAO implements EntityDAO {
                 rollbackException.printStackTrace();
             }
         }
-        closeConnection(conn);
+        ConexionHelper.closeConnection(conn);
     }
 
-
-    public void update(int idProducto, String nombre, double valor) throws SQLException {
-    	Connection conn = createConnection();
-    	conn.setAutoCommit(false);
-    	
-        String sql = "UPDATE producto SET nombre = ?, valor = ? WHERE idProducto = ?";
-        try (PreparedStatement statement = conn.prepareStatement(sql)) {
-            statement.setString(1, nombre);
-            statement.setDouble(2, valor);
-            statement.setInt(3, idProducto);
-            statement.executeUpdate();
-            conn.commit();
-            statement.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            try {
-            	conn.rollback(); // En caso de error, realiza rollback para deshacer los cambios
-            } catch (SQLException rollbackException) {
-                rollbackException.printStackTrace();
-            }
-        }
-        closeConnection(conn);
-    }
-
-
-    public void delete(int idProducto) throws SQLException {
-    	Connection conn = createConnection();
-    	conn.setAutoCommit(false);
-    	
-        String sql = "DELETE FROM producto WHERE idProducto = ?";
-        try (PreparedStatement statement = conn.prepareStatement(sql)) {
-            statement.setInt(1, idProducto);
-            statement.executeUpdate();
-            conn.commit();
-            statement.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            try {
-            	conn.rollback(); // En caso de error, realiza rollback para deshacer los cambios
-            } catch (SQLException rollbackException) {
-                rollbackException.printStackTrace();
-            }
-        }
-        closeConnection(conn);
-    }
-    
+   
     public Producto moreRaisedProduct() throws SQLException{
-    	Connection conn = createConnection();
+    	Connection conn = ConexionHelper.createConnection();
     	conn.setAutoCommit(false);
         String sql = "SELECT P.idProducto, P.nombre AS nombreProducto, P.valor, SUM(FP.cantidad * P.valor) AS recaudacion "
         		+ "FROM factura_producto FP "
@@ -188,7 +133,7 @@ public class MysqlProductoDAO implements EntityDAO {
         	}
             conn.commit();
             statement.close();
-            closeConnection(conn);
+            ConexionHelper.closeConnection(conn);
             return producto;
         } catch (SQLException e) {
             e.printStackTrace();
