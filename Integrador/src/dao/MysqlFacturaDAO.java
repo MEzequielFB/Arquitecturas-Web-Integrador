@@ -14,6 +14,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
+import entidades.Cliente;
 import entidades.Factura;
 import helpers.ConexionHelper;
 import interfacesDAO.FacturaDAO;
@@ -35,7 +36,7 @@ public class MysqlFacturaDAO implements FacturaDAO {
     public void createTable() throws SQLException {
     	Connection conn = ConexionHelper.createConnection();
     	String create_table = "CREATE TABLE IF NOT EXISTS factura(" +
-		"idFactura INT AUTO_INCREMENT," + // PK
+		"idFactura INT," + // PK
 		"idCliente INT," + // Puede ser null - FK
 		"PRIMARY KEY(idFactura)," + 
 		"FOREIGN KEY (idCliente) REFERENCES cliente(idCliente))";
@@ -92,11 +93,12 @@ public class MysqlFacturaDAO implements FacturaDAO {
         return facturas;
     }
 
-    public void insert(int idCliente) throws SQLException {
+    public void insert(Factura factura) throws SQLException {
     	Connection conn = ConexionHelper.createConnection();
-        String sql = "INSERT INTO factura (idCliente) VALUES (?)";
+        String sql = "INSERT INTO factura (idFactura, idCliente) VALUES (?, ?)";
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
-            statement.setInt(1, idCliente);
+        	statement.setInt(1, factura.getIdFactura());
+            statement.setInt(2, factura.getIdCliente());
             statement.executeUpdate();
             conn.commit();
             statement.close();
@@ -110,6 +112,21 @@ public class MysqlFacturaDAO implements FacturaDAO {
         }
         ConexionHelper.closeConnection(conn);
     }
-
+    
+    public void insertAll(List<Factura> facturas) throws SQLException {
+		Connection conn = ConexionHelper.createConnection();
+		String sql = "INSERT INTO factura (idFactura, idCliente) VALUES (?, ?)";
+		PreparedStatement statement = conn.prepareStatement(sql);
+		for (Factura f : facturas) {
+			statement.setInt(1, f.getIdFactura());
+			statement.setInt(2, f.getIdCliente());
+			
+			statement.addBatch();
+		}
+		statement.executeBatch();
+		conn.commit();
+		statement.close();
+		ConexionHelper.closeConnection(conn);
+	}
 
 }

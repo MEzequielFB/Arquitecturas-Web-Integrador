@@ -34,7 +34,7 @@ public class MysqlClienteDAO implements ClienteDAO {
 	@Override
 	public void createTable() throws SQLException {
 		Connection conn = ConexionHelper.createConnection();
-		String create_table = "CREATE TABLE IF NOT EXISTS cliente(" + "idCliente INT AUTO_INCREMENT," + // PK
+		String create_table = "CREATE TABLE IF NOT EXISTS cliente(" + "idCliente INT," + // PK
 				"nombre VARCHAR(500) NOT NULL," + "email VARCHAR(150) NOT NULL," + "PRIMARY KEY(idCliente))";
 
 		conn.prepareStatement(create_table).execute();
@@ -92,18 +92,35 @@ public class MysqlClienteDAO implements ClienteDAO {
 		return clientes;
 	}
 
-	public void insert(String nombre, String email) throws SQLException {
+	public void insert(Cliente cliente) throws SQLException {
 		Connection conn = ConexionHelper.createConnection();
-		String sql = "INSERT INTO cliente (nombre, email) VALUES (?, ?)";
+		String sql = "INSERT INTO cliente (idCliente, nombre, email) VALUES (?, ?, ?)";
 		PreparedStatement statement = conn.prepareStatement(sql);
-		statement.setString(1, nombre);
-		statement.setString(2, email);
+		statement.setInt(1, cliente.getIdCliente());
+		statement.setString(2, cliente.getNombre());
+		statement.setString(3, cliente.getEmail());
 		statement.executeUpdate();
 		conn.commit();
 		statement.close();
 		ConexionHelper.closeConnection(conn);
 	}
 	
+	public void insertAll(List<Cliente> clientes) throws SQLException {
+		Connection conn = ConexionHelper.createConnection();
+		String sql = "INSERT INTO cliente (idCliente, nombre, email) VALUES (?, ?, ?)";
+		PreparedStatement statement = conn.prepareStatement(sql);
+		for (Cliente c : clientes) {
+			statement.setInt(1, c.getIdCliente());
+			statement.setString(2, c.getNombre());
+			statement.setString(3, c.getEmail());
+			
+			statement.addBatch();
+		}
+		statement.executeBatch();
+		conn.commit();
+		statement.close();
+		ConexionHelper.closeConnection(conn);
+	}
 	
 	public List<Cliente> getClientsByBill() throws SQLException {
 		Connection conn = ConexionHelper.createConnection();

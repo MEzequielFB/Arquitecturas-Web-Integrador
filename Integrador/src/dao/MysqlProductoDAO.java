@@ -14,6 +14,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
+import entidades.Cliente;
 import entidades.Producto;
 import helpers.ConexionHelper;
 import interfacesDAO.ProductoDAO;
@@ -36,7 +37,7 @@ public class MysqlProductoDAO implements ProductoDAO {
     	Connection conn = ConexionHelper.createConnection();
     	
     	String create_table = "CREATE TABLE IF NOT EXISTS producto(" +
-		"idProducto INT AUTO_INCREMENT," + // PK
+		"idProducto INT," + // PK
 		"nombre VARCHAR(45) NOT NULL," +
 		"valor FLOAT(7,2) NOT NULL," + // 10000,00
 		"PRIMARY KEY(idProducto))";
@@ -101,14 +102,15 @@ public class MysqlProductoDAO implements ProductoDAO {
         return productos;
     }
 
-    public void insert(String nombre, double valor) throws SQLException {
+    public void insert(Producto producto) throws SQLException {
     	Connection conn = ConexionHelper.createConnection();
     	conn.setAutoCommit(false);
     	
-        String sql = "INSERT INTO producto (nombre, valor) VALUES (?, ?)";
+        String sql = "INSERT INTO producto (idProducto, nombre, valor) VALUES (?, ?, ?)";
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
-            statement.setString(1, nombre);
-            statement.setDouble(2, valor);
+        	statement.setInt(1, producto.getIdProducto());
+            statement.setString(2, producto.getNombre());
+            statement.setDouble(3, producto.getValor());
             statement.executeUpdate();
             conn.commit();
             statement.close();
@@ -122,8 +124,25 @@ public class MysqlProductoDAO implements ProductoDAO {
         }
         ConexionHelper.closeConnection(conn);
     }
+    
+    @Override
+	public void insertAll(List<Producto> productos) throws SQLException {
+    	Connection conn = ConexionHelper.createConnection();
+		String sql = "INSERT INTO producto (idProducto, nombre, valor) VALUES (?, ?, ?)";
+		PreparedStatement statement = conn.prepareStatement(sql);
+		for (Producto p : productos) {
+			statement.setInt(1, p.getIdProducto());
+			statement.setString(2, p.getNombre());
+			statement.setDouble(3, p.getValor());
+			
+			statement.addBatch();
+		}
+		statement.executeBatch();
+		conn.commit();
+		statement.close();
+		ConexionHelper.closeConnection(conn);
+	}
 
-   
     public Producto moreRaisedProduct() throws SQLException {
     	Connection conn = ConexionHelper.createConnection();
     	conn.setAutoCommit(false);
@@ -154,6 +173,5 @@ public class MysqlProductoDAO implements ProductoDAO {
         }
         return producto;
     }
-    
     
 }

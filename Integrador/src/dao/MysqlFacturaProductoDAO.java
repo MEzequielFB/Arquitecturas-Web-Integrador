@@ -15,6 +15,7 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
 import entidades.FacturaProducto;
+import entidades.Producto;
 import helpers.ConexionHelper;
 import interfacesDAO.FacturaProductoDAO;
 
@@ -98,14 +99,14 @@ public class MysqlFacturaProductoDAO implements FacturaProductoDAO {
         return facturas_productos;
     }
 
-    public void insert(int idFactura, int idProducto, int cantidad) throws SQLException {
+    public void insert(FacturaProducto factura_producto) throws SQLException {
     	Connection conn = ConexionHelper.createConnection();
     	
         String sql = "INSERT INTO factura_producto (idFactura, idProducto, cantidad) VALUES (?, ?, ?)";
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
-            statement.setInt(1, idFactura);
-            statement.setInt(2, idProducto);
-            statement.setInt(3, cantidad);
+            statement.setInt(1, factura_producto.getIdFactura());
+            statement.setInt(2, factura_producto.getIdProducto());
+            statement.setInt(3, factura_producto.getCantidad());
             statement.executeUpdate();
             conn.commit();
             statement.close();
@@ -119,6 +120,24 @@ public class MysqlFacturaProductoDAO implements FacturaProductoDAO {
         }
         ConexionHelper.closeConnection(conn);
     }
+
+	@Override
+	public void insertAll(List<FacturaProducto> facturas_productos) throws SQLException {
+		Connection conn = ConexionHelper.createConnection();
+		String sql = "INSERT INTO factura_producto (idFactura, idProducto, cantidad) VALUES (?, ?, ?)";
+		PreparedStatement statement = conn.prepareStatement(sql);
+		for (FacturaProducto fp : facturas_productos) {
+			statement.setInt(1, fp.getIdFactura());
+			statement.setInt(2, fp.getIdProducto());
+			statement.setDouble(3, fp.getCantidad());
+			
+			statement.addBatch();
+		}
+		statement.executeBatch();
+		conn.commit();
+		statement.close();
+		ConexionHelper.closeConnection(conn);
+	}
 
 
 }

@@ -5,14 +5,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-import dao.MysqlClienteDAO;
-import dao.MysqlFacturaDAO;
-import dao.MysqlFacturaProductoDAO;
-import dao.MysqlProductoDAO;
 import entidades.Cliente;
-import entidades.Factura;
-import entidades.FacturaProducto;
-import entidades.Producto;
 import factories.DAOFactory;
 import interfacesDAO.ClienteDAO;
 import interfacesDAO.FacturaDAO;

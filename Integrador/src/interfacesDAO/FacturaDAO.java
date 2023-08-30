@@ -8,5 +8,6 @@ import entidades.Factura;
 public interface FacturaDAO extends CreacionTabla {
 	public Factura getBillById(int idFactura) throws SQLException;
 	public List<Factura> getAll() throws SQLException;
-	public void insert(int idCliente) throws SQLException;
+	public void insert(Factura factura) throws SQLException;
+	public void insertAll(List<Factura> facturas) throws SQLException;
 }
