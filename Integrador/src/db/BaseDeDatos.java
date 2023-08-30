@@ -3,6 +3,7 @@ package db;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 import dao.MysqlClienteDAO;
 import dao.MysqlFacturaDAO;
@@ -22,7 +23,7 @@ public class BaseDeDatos {
 
 	public static void main(String[] args) throws SQLException, FileNotFoundException, IOException {
 		// Punto 1: Crea el esquema (mysql)
-		
+
 		DAOFactory mysql_dao_factory = DAOFactory.getDAOFactory(1);
 
 		ClienteDAO cliente_dao = mysql_dao_factory.getClienteDAO();
@@ -32,7 +33,7 @@ public class BaseDeDatos {
 		FacturaProductoDAO factura_producto_dao = mysql_dao_factory.getFacturaProductoDAO();
 
 		// Punto 2: Leer CSVs y cargar datos a la base de datos
-		
+
 		String path1 = "src/csv/clientes.csv";
 		String path2 = "src/csv/productos.csv";
 		String path3 = "src/csv/facturas.csv";
@@ -42,20 +43,23 @@ public class BaseDeDatos {
 		producto_dao.createTable();
 		factura_dao.createTable();
 		factura_producto_dao.createTable();
-		
-		/*cliente_dao.poblateTable(path1);
-		producto_dao.poblateTable(path2);
-		factura_dao.poblateTable(path3);
-		factura_producto_dao.poblateTable(path4);*/
+
+		// cliente_dao.poblateTable(path1);
+		// producto_dao.poblateTable(path2);
+		// factura_dao.poblateTable(path3);
+		// factura_producto_dao.poblateTable(path4);
 
 		// Punto 3: Obtener el producto que mas cantidades vendio
-		
-       System.out.println(producto_dao.moreRaisedProduct());
+
+		System.out.println(producto_dao.moreRaisedProduct());
 
 		// Punto 4: Lista de clientes a los que mas se les facturo
-		
-		System.out.println(cliente_dao.getClientsByBill());
-		
+
+		List<Cliente> clientsByBill = cliente_dao.getClientsByBill();
+		for (Cliente c : clientsByBill) {
+			System.out.println(c);
+		}
+
 	}
 
 }
