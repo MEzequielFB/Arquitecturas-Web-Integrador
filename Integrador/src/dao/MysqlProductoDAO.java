@@ -16,13 +16,12 @@ import org.apache.commons.csv.CSVRecord;
 
 import entidades.Producto;
 import helpers.ConexionHelper;
+import interfacesDAO.ProductoDAO;
 
 // Consultas de productos
-public class MysqlProductoDAO implements EntityDAO {
+public class MysqlProductoDAO implements ProductoDAO {
 	
-
-  
-    @Override
+	@Override
     public void createTable() throws SQLException {
     	Connection conn = ConexionHelper.createConnection();
     	
@@ -37,7 +36,7 @@ public class MysqlProductoDAO implements EntityDAO {
     	ConexionHelper.closeConnection(conn);
     }
     
-    @Override
+	@Override
 	public void poblateTable(String path) throws FileNotFoundException, IOException, SQLException {
 		Connection conn = ConexionHelper.createConnection();
 
@@ -115,7 +114,7 @@ public class MysqlProductoDAO implements EntityDAO {
     }
 
    
-    public Producto moreRaisedProduct() throws SQLException{
+    public Producto moreRaisedProduct() throws SQLException {
     	Connection conn = ConexionHelper.createConnection();
     	conn.setAutoCommit(false);
         String sql = "SELECT P.idProducto, P.nombre AS nombreProducto, P.valor, SUM(FP.cantidad * P.valor) AS recaudacion "

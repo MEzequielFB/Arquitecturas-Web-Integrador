@@ -4,6 +4,10 @@ import dao.MysqlClienteDAO;
 import dao.MysqlFacturaDAO;
 import dao.MysqlFacturaProductoDAO;
 import dao.MysqlProductoDAO;
+import interfacesDAO.ClienteDAO;
+import interfacesDAO.FacturaDAO;
+import interfacesDAO.FacturaProductoDAO;
+import interfacesDAO.ProductoDAO;
 
 public abstract class DAOFactory {
 	public static final int MYSQL_JDBC = 1;
@@ -11,10 +15,10 @@ public abstract class DAOFactory {
 	private static DAOFactory mysql;
 	
 	//Obtiene las entidades para realizar consultas
-	public abstract MysqlClienteDAO getClienteDAO();
-	public abstract MysqlProductoDAO getProductoDAO();
-	public abstract MysqlFacturaDAO getFacturaDAO();
-	public abstract MysqlFacturaProductoDAO getFacturaProductoDAO();
+	public abstract ClienteDAO getClienteDAO();
+	public abstract ProductoDAO getProductoDAO();
+	public abstract FacturaDAO getFacturaDAO();
+	public abstract FacturaProductoDAO getFacturaProductoDAO();
 		
 	//Obtiene una base de datos para obtener las entidades de esta de forma
 	public static DAOFactory getDAOFactory(int whichFactory) {

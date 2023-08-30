@@ -16,9 +16,10 @@ import org.apache.commons.csv.CSVRecord;
 
 import entidades.Cliente;
 import helpers.ConexionHelper;
+import interfacesDAO.ClienteDAO;
 
 // Consultas de clientes
-public class MysqlClienteDAO implements EntityDAO {
+public class MysqlClienteDAO implements ClienteDAO {
 
 	@Override
 	public void createTable() throws SQLException {

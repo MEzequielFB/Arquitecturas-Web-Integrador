@@ -16,12 +16,12 @@ import org.apache.commons.csv.CSVRecord;
 
 import entidades.Factura;
 import helpers.ConexionHelper;
+import interfacesDAO.FacturaDAO;
 
 // Consultas de facturas
-public class MysqlFacturaDAO implements EntityDAO {
+public class MysqlFacturaDAO implements FacturaDAO {
     
-    
-    @Override
+	@Override
     public void createTable() throws SQLException {
     	Connection conn = ConexionHelper.createConnection();
     	String create_table = "CREATE TABLE IF NOT EXISTS factura(" +
@@ -34,7 +34,7 @@ public class MysqlFacturaDAO implements EntityDAO {
     	conn.commit();
     }
 
-    @Override
+	@Override
 	public void poblateTable(String path) throws FileNotFoundException, IOException, SQLException {
     	Connection conn = ConexionHelper.createConnection();
 

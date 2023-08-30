@@ -13,6 +13,10 @@ import entidades.Factura;
 import entidades.FacturaProducto;
 import entidades.Producto;
 import factories.DAOFactory;
+import interfacesDAO.ClienteDAO;
+import interfacesDAO.FacturaDAO;
+import interfacesDAO.FacturaProductoDAO;
+import interfacesDAO.ProductoDAO;
 
 public class BaseDeDatos {
 
@@ -21,11 +25,11 @@ public class BaseDeDatos {
 		
 		DAOFactory mysql_dao_factory = DAOFactory.getDAOFactory(1);
 
-		MysqlClienteDAO cliente_dao = mysql_dao_factory.getClienteDAO();
-		MysqlProductoDAO producto_dao = mysql_dao_factory.getProductoDAO();
+		ClienteDAO cliente_dao = mysql_dao_factory.getClienteDAO();
+		ProductoDAO producto_dao = mysql_dao_factory.getProductoDAO();
 
-		MysqlFacturaDAO factura_dao = mysql_dao_factory.getFacturaDAO();
-		MysqlFacturaProductoDAO factura_producto_dao = mysql_dao_factory.getFacturaProductoDAO();
+		FacturaDAO factura_dao = mysql_dao_factory.getFacturaDAO();
+		FacturaProductoDAO factura_producto_dao = mysql_dao_factory.getFacturaProductoDAO();
 
 		// Punto 2: Leer CSVs y cargar datos a la base de datos
 		
@@ -34,15 +38,15 @@ public class BaseDeDatos {
 		String path3 = "src/csv/facturas.csv";
 		String path4 = "src/csv/facturas-productos.csv";
 
-	/*	cliente_dao.createTable();
+		cliente_dao.createTable();
 		producto_dao.createTable();
 		factura_dao.createTable();
 		factura_producto_dao.createTable();
-		*/
-	//	cliente_dao.poblateTable(path1);
-	//	producto_dao.poblateTable(path2);
-	//	factura_dao.poblateTable(path3);
-	//	factura_producto_dao.poblateTable(path4);
+		
+		/*cliente_dao.poblateTable(path1);
+		producto_dao.poblateTable(path2);
+		factura_dao.poblateTable(path3);
+		factura_producto_dao.poblateTable(path4);*/
 
 		// Punto 3: Obtener el producto que mas cantidades vendio
 		
