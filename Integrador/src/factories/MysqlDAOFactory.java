@@ -11,8 +11,8 @@ import dao.MysqlFacturaProductoDAO;
 import dao.MysqlProductoDAO;
 
 public class MysqlDAOFactory extends DAOFactory {
-	public static final String DRIVER = "com.mysql.cj.jdbc.Driver";
-	public static final String DBURL = "jdbc:mysql://localhost:3306/sql_integrador";
+	private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
+	private static final String DBURL = "jdbc:mysql://localhost:3306/sql_integrador";
 	
 	@Override
 	public MysqlClienteDAO getClienteDAO() {
