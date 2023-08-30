@@ -8,7 +8,7 @@ import dao.MysqlProductoDAO;
 public abstract class DAOFactory {
 	public static final int MYSQL_JDBC = 1;
 	
-	public static DAOFactory mysql;
+	private static DAOFactory mysql;
 	
 	//Obtiene las entidades para realizar consultas
 	public abstract MysqlClienteDAO getClienteDAO();
