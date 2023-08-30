@@ -35,7 +35,7 @@ public class MysqlClienteDAO implements EntityDAO {
 		Connection conn = createConnection();
 		conn.setAutoCommit(false);
 
-		String create_table = "CREATE TABLE cliente(" + "idCliente INT AUTO_INCREMENT," + // PK
+		String create_table = "CREATE TABLE IF NOT EXISTS cliente(" + "idCliente INT AUTO_INCREMENT," + // PK
 				"nombre VARCHAR(500) NOT NULL," + "email VARCHAR(150) NOT NULL," + "PRIMARY KEY(idCliente))";
 
 		conn.prepareStatement(create_table).execute();

@@ -35,7 +35,7 @@ public class MysqlProductoDAO implements EntityDAO {
     	Connection conn = createConnection();
     	conn.setAutoCommit(false);
     	
-    	String create_table = "CREATE TABLE producto(" +
+    	String create_table = "CREATE TABLE IF NOT EXISTS producto(" +
 		"idProducto INT AUTO_INCREMENT," + // PK
 		"nombre VARCHAR(45) NOT NULL," +
 		"valor FLOAT(7,2) NOT NULL," + // 10000,00

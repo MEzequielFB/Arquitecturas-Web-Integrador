@@ -35,16 +35,14 @@ public class BaseDeDatos {
 		String path4 = "src/csv/facturas-productos.csv";
 
 		cliente_dao.createTable();
-		cliente_dao.poblateTable(path1);
-
 		producto_dao.createTable();
-		producto_dao.poblateTable(path2);
-
 		factura_dao.createTable();
-		factura_dao.poblateTable(path3);
-
 		factura_producto_dao.createTable();
-		factura_producto_dao.poblateTable(path4);
+		
+	//	cliente_dao.poblateTable(path1);
+	//	producto_dao.poblateTable(path2);
+	//	factura_dao.poblateTable(path3);
+	//	factura_producto_dao.poblateTable(path4);
 
 		// Punto 3: Obtener el producto que mas cantidades vendio
 		

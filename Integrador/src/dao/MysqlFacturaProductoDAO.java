@@ -35,7 +35,7 @@ public class MysqlFacturaProductoDAO implements EntityDAO {
     	Connection conn = createConnection();
     	conn.setAutoCommit(false);
     	
-    	String create_table = "CREATE TABLE factura_producto(" +
+    	String create_table = "CREATE TABLE IF NOT EXISTS factura_producto(" +
 		"idFactura INT," + // PK - FK
 		"idProducto INT," + // PK - FK
 		"cantidad INT NOT NULL," +
