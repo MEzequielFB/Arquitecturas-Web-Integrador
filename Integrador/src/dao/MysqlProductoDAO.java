@@ -184,7 +184,7 @@ public class MysqlProductoDAO implements EntityDAO {
         try (PreparedStatement statement = conn.prepareStatement(sql)) {
         	ResultSet resultSet = statement.executeQuery();
         	if (resultSet.next()) {
-        		producto = new Producto(resultSet.getInt("idProducto"),resultSet.getString("nombreProducto"),resultSet.getDouble("recaudacion"));
+        		producto = new Producto(resultSet.getInt("idProducto"),resultSet.getString("nombreProducto"),resultSet.getDouble("valor"));
         	}
             conn.commit();
             statement.close();
