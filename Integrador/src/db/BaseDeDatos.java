@@ -44,14 +44,14 @@ public class BaseDeDatos {
 		factura_dao.createTable();
 		factura_producto_dao.createTable();
 
-		// cliente_dao.poblateTable(path1);
-		// producto_dao.poblateTable(path2);
-		// factura_dao.poblateTable(path3);
-		// factura_producto_dao.poblateTable(path4);
+		//cliente_dao.poblateTable(path1);
+		//producto_dao.poblateTable(path2);
+		//factura_dao.poblateTable(path3);
+		//factura_producto_dao.poblateTable(path4);
 
 		// Punto 3: Obtener el producto que mas cantidades vendio
 
-		System.out.println(producto_dao.moreRaisedProduct());
+		System.out.println(producto_dao.moreRaisedProduct() + "\n");
 
 		// Punto 4: Lista de clientes a los que mas se les facturo
 

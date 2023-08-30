@@ -20,6 +20,16 @@ import interfacesDAO.ClienteDAO;
 
 // Consultas de clientes
 public class MysqlClienteDAO implements ClienteDAO {
+	private static MysqlClienteDAO instancia;
+	
+	private MysqlClienteDAO(){}
+	
+	public static MysqlClienteDAO getInstancia() {
+		if (instancia == null) {
+			instancia = new MysqlClienteDAO();
+		}
+		return instancia;
+	}
 
 	@Override
 	public void createTable() throws SQLException {

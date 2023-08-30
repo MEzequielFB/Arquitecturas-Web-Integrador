@@ -6,24 +6,34 @@ import dao.MysqlFacturaProductoDAO;
 import dao.MysqlProductoDAO;
 
 public class MysqlDAOFactory extends DAOFactory {
+	private static MysqlDAOFactory instancia;
+	
+	private MysqlDAOFactory() {}
+	
+	public static MysqlDAOFactory getInstancia() {
+		if (instancia == null) {
+			instancia = new MysqlDAOFactory();
+		}
+		return instancia;
+	}
 	
 	@Override
 	public MysqlClienteDAO getClienteDAO() {
-		return new MysqlClienteDAO();
+		return MysqlClienteDAO.getInstancia();
 	}
 
 	@Override
 	public MysqlProductoDAO getProductoDAO() {
-		return new MysqlProductoDAO();
+		return MysqlProductoDAO.getInstancia();
 	}
 
 	@Override
 	public MysqlFacturaDAO getFacturaDAO() {
-		return new MysqlFacturaDAO();
+		return MysqlFacturaDAO.getInstancia();
 	}
 
 	@Override
 	public MysqlFacturaProductoDAO getFacturaProductoDAO() {
-		return new MysqlFacturaProductoDAO();
+		return MysqlFacturaProductoDAO.getInstancia();
 	}
 }

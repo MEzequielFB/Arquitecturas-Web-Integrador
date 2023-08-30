@@ -20,6 +20,16 @@ import interfacesDAO.FacturaProductoDAO;
 
 // Consultas de facturas de productos
 public class MysqlFacturaProductoDAO implements FacturaProductoDAO {
+	private static MysqlFacturaProductoDAO instancia;
+	
+	private MysqlFacturaProductoDAO(){}
+	
+	public static MysqlFacturaProductoDAO getInstancia() {
+		if (instancia == null) {
+			instancia = new MysqlFacturaProductoDAO();
+		}
+		return instancia;
+	}
        
 	@Override
     public void createTable() throws SQLException {

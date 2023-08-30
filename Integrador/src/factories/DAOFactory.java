@@ -12,8 +12,6 @@ import interfacesDAO.ProductoDAO;
 public abstract class DAOFactory {
 	public static final int MYSQL_JDBC = 1;
 	
-	private static DAOFactory mysql;
-	
 	//Obtiene las entidades para realizar consultas
 	public abstract ClienteDAO getClienteDAO();
 	public abstract ProductoDAO getProductoDAO();
@@ -24,19 +22,9 @@ public abstract class DAOFactory {
 	public static DAOFactory getDAOFactory(int whichFactory) {
 		switch (whichFactory) {
 			case MYSQL_JDBC:
-				return instanciarMySqL();
+				return MysqlDAOFactory.getInstancia();
 			default:
 				return null;
 		}
-	}
-	
-	//Garantiza SINGLETON
-
-	public static DAOFactory instanciarMySqL() {
-		if (mysql == null) {
-			mysql = new MysqlDAOFactory();
-			return mysql;
-		}
-		return mysql;
 	}
 }

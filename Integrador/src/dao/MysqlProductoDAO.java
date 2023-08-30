@@ -20,6 +20,16 @@ import interfacesDAO.ProductoDAO;
 
 // Consultas de productos
 public class MysqlProductoDAO implements ProductoDAO {
+	private static MysqlProductoDAO instancia;
+	
+	private MysqlProductoDAO(){}
+	
+	public static MysqlProductoDAO getInstancia() {
+		if (instancia == null) {
+			instancia = new MysqlProductoDAO();
+		}
+		return instancia;
+	}
 	
 	@Override
     public void createTable() throws SQLException {

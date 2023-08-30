@@ -20,6 +20,16 @@ import interfacesDAO.FacturaDAO;
 
 // Consultas de facturas
 public class MysqlFacturaDAO implements FacturaDAO {
+	private static MysqlFacturaDAO instancia;
+	
+	private MysqlFacturaDAO(){}
+	
+	public static MysqlFacturaDAO getInstancia() {
+		if (instancia == null) {
+			instancia = new MysqlFacturaDAO();
+		}
+		return instancia;
+	}
     
 	@Override
     public void createTable() throws SQLException {
