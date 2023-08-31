@@ -4,7 +4,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +56,6 @@ public class CreacionTablasHelper {
 	}
 
 	public static void poblateTables() throws SQLException, FileNotFoundException, IOException {
-		Connection conn = ConexionHelper.createConnection();
 		CSVParser parser = CSVFormat.DEFAULT.withHeader().parse(new FileReader(path_cliente));
 		List<Cliente> clientes = new ArrayList<>();
 		for (CSVRecord row : parser) {
@@ -67,7 +65,6 @@ public class CreacionTablasHelper {
 		DAOFactory mysql_dao_factory = DAOFactory.getDAOFactory(1);
 		ClienteDAO cliente_dao = mysql_dao_factory.getClienteDAO();
 		cliente_dao.insertAll(clientes);
-		ConexionHelper.closeConnection(conn);
 
 		parser = CSVFormat.DEFAULT.withHeader().parse(new FileReader(path_producto));
 		List<Producto> productos = new ArrayList<>();
@@ -97,7 +94,5 @@ public class CreacionTablasHelper {
 		}
 		FacturaProductoDAO facturaproducto_dao = mysql_dao_factory.getFacturaProductoDAO();
 		facturaproducto_dao.insertAll(facturas_productos);
-
-		ConexionHelper.closeConnection(conn);
 	}
 }
