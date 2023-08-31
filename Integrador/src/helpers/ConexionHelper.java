@@ -31,7 +31,7 @@ public class ConexionHelper {
 			}
 
 			try {
-				conn = DriverManager.getConnection(DBURL, "root", "arquitecturasweb1");
+				conn = DriverManager.getConnection(DBURL, "root", "");
 				conn.setAutoCommit(false);
 			} catch (SQLException e) {
 				e.printStackTrace();
