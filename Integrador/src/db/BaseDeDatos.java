@@ -7,6 +7,7 @@ import java.util.List;
 
 import entidades.Cliente;
 import factories.DAOFactory;
+import helpers.CreacionTablasHelper;
 import interfacesDAO.ClienteDAO;
 import interfacesDAO.FacturaDAO;
 import interfacesDAO.FacturaProductoDAO;
@@ -26,21 +27,9 @@ public class BaseDeDatos {
 		FacturaProductoDAO factura_producto_dao = mysql_dao_factory.getFacturaProductoDAO();
 
 		// Punto 2: Leer CSVs y cargar datos a la base de datos
-
-		String path1 = "src/csv/clientes.csv";
-		String path2 = "src/csv/productos.csv";
-		String path3 = "src/csv/facturas.csv";
-		String path4 = "src/csv/facturas-productos.csv";
-
-		cliente_dao.createTable();
-		producto_dao.createTable();
-		factura_dao.createTable();
-		factura_producto_dao.createTable();
-
-		//cliente_dao.poblateTable(path1);
-		//producto_dao.poblateTable(path2);
-		//factura_dao.poblateTable(path3);
-		//factura_producto_dao.poblateTable(path4);
+		
+		CreacionTablasHelper.createSchema();
+		CreacionTablasHelper.poblateTables();
 
 		// Punto 3: Obtener el producto que mas cantidades vendio
 

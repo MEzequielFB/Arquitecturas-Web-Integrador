@@ -5,7 +5,7 @@ import java.util.List;
 
 import entidades.Producto;
 
-public interface ProductoDAO extends CreacionTabla {
+public interface ProductoDAO {
 	public Producto getById(int idProducto) throws SQLException;
 	public List<Producto> getAll() throws SQLException;
 	public void insert(Producto producto) throws SQLException;

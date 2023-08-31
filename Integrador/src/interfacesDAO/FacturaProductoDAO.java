@@ -5,7 +5,7 @@ import java.util.List;
 
 import entidades.FacturaProducto;
 
-public interface FacturaProductoDAO extends CreacionTabla {
+public interface FacturaProductoDAO {
 	public FacturaProducto getBillById(int idFactura) throws SQLException;
 	public List<FacturaProducto> getAll() throws SQLException;
 	public void insert(FacturaProducto factura) throws SQLException;

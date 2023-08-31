@@ -1,8 +1,5 @@
 package dao;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,11 +7,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVRecord;
-
-import entidades.Cliente;
 import entidades.Factura;
 import helpers.ConexionHelper;
 import interfacesDAO.FacturaDAO;
@@ -30,37 +22,6 @@ public class MysqlFacturaDAO implements FacturaDAO {
 			instancia = new MysqlFacturaDAO();
 		}
 		return instancia;
-	}
-    
-	@Override
-    public void createTable() throws SQLException {
-    	Connection conn = ConexionHelper.createConnection();
-    	String create_table = "CREATE TABLE IF NOT EXISTS factura(" +
-		"idFactura INT," + // PK
-		"idCliente INT," + // Puede ser null - FK
-		"PRIMARY KEY(idFactura)," + 
-		"FOREIGN KEY (idCliente) REFERENCES cliente(idCliente))";
-    	
-    	conn.prepareStatement(create_table).execute();
-    	conn.commit();
-    }
-
-	@Override
-	public void poblateTable(String path) throws FileNotFoundException, IOException, SQLException {
-    	Connection conn = ConexionHelper.createConnection();
-
-		CSVParser parser = CSVFormat.DEFAULT.withHeader().parse(
-				new FileReader(path));
-		for (CSVRecord row : parser) {
-			String sql = "INSERT INTO factura (idFactura, idCliente) VALUES (?, ?)";
-			PreparedStatement statement = conn.prepareStatement(sql);
-			statement.setInt(1, Integer.valueOf(row.get("idFactura")));
-			statement.setInt(2, Integer.valueOf(row.get("idCliente")));
-			statement.executeUpdate();
-			conn.commit();
-			statement.close();
-		}
-		ConexionHelper.closeConnection(conn);
 	}
     
     public Factura getBillById(int idFactura) throws SQLException {

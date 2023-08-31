@@ -5,7 +5,7 @@ import java.util.List;
 
 import entidades.Cliente;
 
-public interface ClienteDAO extends CreacionTabla {
+public interface ClienteDAO {
 	public Cliente getClientById(int idCliente) throws SQLException;
 	public List<Cliente> getAllClients() throws SQLException;
 	public void insert(Cliente cliente) throws SQLException;

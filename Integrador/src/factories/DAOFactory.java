@@ -1,9 +1,5 @@
 package factories;
 
-import dao.MysqlClienteDAO;
-import dao.MysqlFacturaDAO;
-import dao.MysqlFacturaProductoDAO;
-import dao.MysqlProductoDAO;
 import interfacesDAO.ClienteDAO;
 import interfacesDAO.FacturaDAO;
 import interfacesDAO.FacturaProductoDAO;
