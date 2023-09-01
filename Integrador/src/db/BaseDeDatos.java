@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
+import dto.DTOClienteMayorFacturacion;
 import entidades.Cliente;
 import factories.DAOFactory;
 import helpers.CreacionTablasHelper;
@@ -37,8 +38,8 @@ public class BaseDeDatos {
 
 		// Punto 4: Lista de clientes a los que mas se les facturo
 
-		List<Cliente> clientsByBill = cliente_dao.getClientsByBill();
-		for (Cliente c : clientsByBill) {
+		List<DTOClienteMayorFacturacion> clientsByBill = cliente_dao.getClientsByBill();
+		for (DTOClienteMayorFacturacion c : clientsByBill) {
 			System.out.println(c);
 		}
 

@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
+import dto.DTOClienteMayorFacturacion;
 import entidades.Cliente;
 import helpers.ConexionHelper;
 import interfacesDAO.ClienteDAO;
@@ -86,7 +86,7 @@ public class MysqlClienteDAO implements ClienteDAO {
 		ConexionHelper.closeConnection(conn);
 	}
 	
-	public List<Cliente> getClientsByBill() throws SQLException {
+	/*public List<Cliente> getClientsByBill() throws SQLException {
 		Connection conn = ConexionHelper.createConnection();
 		List<Cliente> clientes = new ArrayList<>();
 		String sql = "SELECT c.idCliente, c.nombre, c.email, SUM(fp.cantidad * p.valor) AS facturacion "
@@ -109,6 +109,34 @@ public class MysqlClienteDAO implements ClienteDAO {
 		statement.close();
 		ConexionHelper.closeConnection(conn);
 		return clientes;
+	}*/
+	
+	public List<DTOClienteMayorFacturacion> getClientsByBill() throws SQLException {
+	    Connection conn = ConexionHelper.createConnection();
+	    List<DTOClienteMayorFacturacion> clientes = new ArrayList<>();
+	    String sql = "SELECT c.idCliente, c.nombre, c.email, SUM(fp.cantidad * p.valor) AS facturacion "
+	            + "FROM cliente c "
+	            + "LEFT JOIN factura f "
+	            + "    ON c.idCliente = f.idCliente "
+	            + "JOIN factura_producto fp "
+	            + "    ON f.idFactura = fp.idFactura "
+	            + "JOIN producto p "
+	            + "    ON fp.idProducto = p.idProducto "
+	            + "GROUP BY c.idCliente, c.nombre, c.email "
+	            + "ORDER BY facturacion DESC";
+	    PreparedStatement statement = conn.prepareStatement(sql);
+	    ResultSet resultSet = statement.executeQuery();
+	    while (resultSet.next()) {
+	        int idCliente = resultSet.getInt("idCliente");
+	        String nombre = resultSet.getString("nombre");
+	        String email = resultSet.getString("email");
+	        double facturacion = resultSet.getDouble("facturacion");
+	        DTOClienteMayorFacturacion clienteDTO = new DTOClienteMayorFacturacion(idCliente, nombre, email, facturacion);
+	        clientes.add(clienteDTO);
+	    }
+	    statement.close();
+	    ConexionHelper.closeConnection(conn);
+	    return clientes;
 	}
 
 }
