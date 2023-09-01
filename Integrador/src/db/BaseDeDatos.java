@@ -36,7 +36,7 @@ public class BaseDeDatos {
 
 		System.out.println(producto_dao.moreRaisedProduct() + "\n");
 
-		// Punto 4: Lista de clientes a los que mas se les facturo
+		// Punto 4: Lista de clientes a los que mas se les facturoG
 
 		List<DTOClienteMayorFacturacion> clientsByBill = cliente_dao.getClientsByBill();
 		for (DTOClienteMayorFacturacion c : clientsByBill) {
