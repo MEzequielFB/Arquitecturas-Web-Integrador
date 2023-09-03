@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 public class ConexionHelper {
 	private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
-	private static final String DBURL = "jdbc:mysql://localhost:3306/sql_integrador";
+	private static final String DBURL = "jdbc:mysql://localhost:3306/sql_integrador?createDatabaseIfNotExist=true";
 	private static Connection conn;
 
 	public static Connection createConnection() throws SQLException {
